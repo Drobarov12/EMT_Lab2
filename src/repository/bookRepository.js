@@ -13,13 +13,17 @@ const BookService = {
     deleteBook:(id)=>{
         return axios.delete(`/delete/${id}`)
     },
-    addBook:(id,name,copies,author,category)=>{
-        return axios.post("/add",{
-            "id": id,
-            "name":name,
-            "copies":copies,
-            "author":author,
-            "category":category
+    markAsTaken:(id)=>{
+        return axios.post(`/mark-as-taken/${id}`)
+    },
+    addBook:(name,copies,author,category)=>{
+        return axios.get("/add",{
+            "book":{
+                "name":name,
+                "copies":copies,
+                "authorId":author,
+                "category":category
+            }
         })
     }
 }

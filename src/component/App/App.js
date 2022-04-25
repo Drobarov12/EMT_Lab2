@@ -1,12 +1,11 @@
-import logo from '../../logo.svg';
 import './App.css';
 import React,{Component} from "react";
-// import {BrowserRouter as Routes, Navigate ,Route} from 'react-router-dom';
-import {BrowserRouter, Routes, Route,Navigate} from 'react-router-dom';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Books from '../Books/BookList/books';
 import Categories from "../Categories/categories";
+import Authors from "../Authors/authors"
 import Header from "../Header/header";
-import BookAdd from"../Books/BookAdd/bookAdd"
+import BookAdd from"../Books/BookAdd/bookAdd";
 import BookService from "../../repository/bookRepository";
 
 class App extends Component{
@@ -41,10 +40,11 @@ class App extends Component{
             <BrowserRouter>
                 <Header/>
                 <Routes>
-                    <Route path="/" element={<Books books={this.state.books} onDelete={this.deleteBook}/>} />
+                    <Route path="/" element={<Books books={this.state.books} onDelete={this.deleteBook} onTaken={this.markAsTaken}/>} />
                     <Route path="categories" element={<Categories categories={this.state.categories}/>} />
+                    <Route path="authors" element={<Authors authors={this.state.authors}/>} />
                     <Route path="books/add" element={<BookAdd categories={this.state.categories} authors = {this.state.authors} onAddBook={this.addProduct}/>} />
-                    <Route path="books" element={<Books books={this.state.books} onDelete={this.deleteBook}/>} />
+                    <Route path="books" element={<Books books={this.state.books} onDelete={this.deleteBook} onTaken={this.markAsTaken}/>} />
                 </Routes>
             </BrowserRouter>
 
@@ -88,6 +88,13 @@ class App extends Component{
         BookService.deleteBook(id)
             .then(()=>{
                 this.loadBooks();
+            })
+    }
+
+    markAsTaken = (id) =>{
+        BookService.markAsTaken(id)
+            .then(() =>{
+                this.loadBooks()
             })
     }
 
