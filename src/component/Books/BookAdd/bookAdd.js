@@ -5,7 +5,6 @@ const bookAdd = (props) =>{
 
     const history = useNavigate();
     const [formData,updateFormData] = React.useState({
-        id:0,
         name:"",
         copies:0,
         author:1,
@@ -21,13 +20,12 @@ const bookAdd = (props) =>{
 
     const onFormSubmit = (e) => {
         e.preventDefault();
-        const id = formData.id;
         const name = formData.name;
         const copies = formData.copies;
         const author = formData.author;
         const category = formData.category;
 
-        props.onAddBook(id,name,copies,author,category);
+        props.onAddBook(name,copies,author,category);
         history("/books");
     }
 

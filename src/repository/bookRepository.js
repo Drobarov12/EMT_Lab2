@@ -4,27 +4,38 @@ const BookService = {
     fetchBooks: () => {
         return axios.get("/books")
     },
-    fetchCategories:() =>{
+    fetchCategories: () => {
         return axios.get("/categories")
     },
-    fetchAuthors:() =>{
+    fetchAuthors: () => {
         return axios.get("/authors")
     },
-    deleteBook:(id)=>{
+    deleteBook: (id) => {
         return axios.delete(`/delete/${id}`)
     },
-    markAsTaken:(id)=>{
+    markAsTaken: (id) => {
         return axios.post(`/mark-as-taken/${id}`)
     },
-    addBook:(name,copies,author,category)=>{
-        return axios.get("/add",{
-            "book":{
-                "name":name,
-                "copies":copies,
-                "authorId":author,
-                "category":category
-            }
+    addBook: (name, copies, author, category) => {
+        return axios.get("/add", {
+            "name": name,
+            "copies": copies,
+            "authorId": author,
+            "category": category
+
         })
+    },
+    editBook: (id, name, copies, author, category) => {
+        return axios.put(`edit/${id}`, {
+            "name": name,
+            "copies": copies,
+            "authorId": author,
+            "category": category
+        })
+
+    },
+    getBook: (id) => {
+        return axios.get(`/${id}`);
     }
 }
 

@@ -7,6 +7,7 @@ import Authors from "../Authors/authors"
 import Header from "../Header/header";
 import BookAdd from"../Books/BookAdd/bookAdd";
 import BookService from "../../repository/bookRepository";
+import BookEdit from "../Books/BookEdit/bookEdit";
 
 class App extends Component{
     constructor(props) {
@@ -14,7 +15,8 @@ class App extends Component{
         this.state = {
             books: [],
             categories:[],
-            authors:[]
+            authors:[],
+            selectedBook: {}
         }
     }
 
@@ -40,11 +42,28 @@ class App extends Component{
             <BrowserRouter>
                 <Header/>
                 <Routes>
-                    <Route path="/" element={<Books books={this.state.books} onDelete={this.deleteBook} onTaken={this.markAsTaken}/>} />
+                    <Route path="/" element={
+                        <Books books={this.state.books} onDelete={this.deleteBook} onTaken={this.markAsTaken}/>
+                    } />
                     <Route path="categories" element={<Categories categories={this.state.categories}/>} />
                     <Route path="authors" element={<Authors authors={this.state.authors}/>} />
-                    <Route path="books/add" element={<BookAdd categories={this.state.categories} authors = {this.state.authors} onAddBook={this.addProduct}/>} />
-                    <Route path="books" element={<Books books={this.state.books} onDelete={this.deleteBook} onTaken={this.markAsTaken}/>} />
+                    <Route path="books/add" element={
+                        <BookAdd categories={this.state.categories}
+                                 authors = {this.state.authors}
+                                 onAddBook={this.addBook}/>
+                    } />
+                    <Route path="books/edit/:id" element={
+                        <BookEdit categories={this.state.categories}
+                                  authors = {this.state.authors}
+                                  onEdit={this.editBook}
+                                  book = {this.state.selectedBook}/>
+                    } />
+                    <Route path="books" element={
+                        <Books books={this.state.books}
+                               onDelete={this.deleteBook}
+                               onTaken={this.markAsTaken}
+                               onEdit={this.getBook}/>
+                    } />
                 </Routes>
             </BrowserRouter>
 
@@ -98,8 +117,24 @@ class App extends Component{
             })
     }
 
-    addProduct = (id,name,copies,author,category) => {
-        BookService.addBook(id,name,copies,author,category)
+    addBook = (name,copies,author,category) => {
+        BookService.addBook(name,copies,author,category)
+            .then(()=>{
+                this.loadBooks();
+            })
+    }
+
+    getBook = (id) => {
+        BookService.getBook(id)
+            .then((data) => {
+                this.setState({
+                    selectedBook:data.data
+                })
+            })
+    }
+
+    editBook = (id,name,copies,author,category) =>{
+        BookService.editBook(id,name,copies,author,category)
             .then(()=>{
                 this.loadBooks();
             })
